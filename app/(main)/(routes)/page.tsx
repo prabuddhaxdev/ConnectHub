@@ -1,8 +1,12 @@
+import { Button } from "@/components/ui/button";
+import { UserButton } from "@clerk/nextjs";
 
-function Home() {
+export default function Home() {
   return (
-    <div>This is a protected route</div>
-  )
+    <div>
+      <h1 className="text-3xl font-bold text-indigo-600">ConnectHub</h1>
+      <Button>Hello</Button>
+      <UserButton/>
+    </div>
+  );
 }
-
-export default Home
