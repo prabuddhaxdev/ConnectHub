@@ -14,10 +14,18 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FileUpload } from "../file-upload";
+import { FileUpload } from "@/components/file-upload";
+import { UserButton } from "@clerk/nextjs";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Server name is required." }),
@@ -40,8 +48,16 @@ export function InitialModal() {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-  console.log(values)
-};
+    try {
+
+      form.reset();
+      router.refresh();
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -50,7 +66,15 @@ export function InitialModal() {
 
   return (
     <Dialog open>
-      <DialogContent className="bg-white text-black p-0 overflow-hidden">
+      <DialogContent style={{
+      position: 'fixed',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      maxWidth: '28rem',
+      width: '90vw',
+      zIndex: 50
+    }} className="bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center font-bold">
             Customize your server
@@ -70,7 +94,11 @@ export function InitialModal() {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <FileUpload />
+                        <FileUpload
+                          endpoint="serverImage"
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
                       </FormControl>
                     </FormItem>
                   )}
