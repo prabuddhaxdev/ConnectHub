@@ -23,6 +23,7 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
 
@@ -48,6 +49,7 @@ export function InitialModal() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+        await axios.post("/api/servers", values);
 
       form.reset();
       router.refresh();
